@@ -24,7 +24,7 @@ export const mockFarmDatabase = [
         { lat: 10.8242, lng: 79.2015 },
         { lat: 10.8230, lng: 79.1990 }
       ],
-      "FARM001",
+      "FARM001".split('').reduce((acc, char) => acc + char.charCodeAt(0), 0),
       3  // 3 zones
     ),
     overallHealth: 68
@@ -53,7 +53,7 @@ export const mockFarmDatabase = [
         { lat: 11.7175, lng: 78.2305 },
         { lat: 11.7152, lng: 78.2295 }
       ],
-      "FARM002",
+      "FARM002".split('').reduce((acc, char) => acc + char.charCodeAt(0), 0),
       2  // 2 zones
     ),
     overallHealth: 62
@@ -270,7 +270,7 @@ function generateStressZones(boundary, seed) {
     };
     
     // Create zone coordinates - properly subdivide the boundary
-    const zoneCoords = subdividePolygon(boundary, numZones, i);
+    let zoneCoords = subdividePolygon(boundary, numZones, i);
     
     // Validate zone coordinates
     if (!zoneCoords || zoneCoords.length < 3) {

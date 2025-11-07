@@ -16,7 +16,8 @@ const DemoComparison = ({ isOpen, onClose }) => {
   const fetchDemos = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/demo-comparison');
+      // Fixed the API endpoint to use the correct port (5002 instead of 5000)
+      const response = await axios.get('http://localhost:5002/api/demo-comparison');
       setDemos(response.data.demos || []);
       if (response.data.demos && response.data.demos.length > 0) {
         setSelectedDemo(response.data.demos[0]);
@@ -190,12 +191,12 @@ const DemoComparison = ({ isOpen, onClose }) => {
                         <p className="text-sm text-gray-600 mb-3 font-medium">Zone-based Irrigation Map</p>
                         <div className="grid grid-cols-4 gap-1">
                           {[
-                            'green-600', 'green-500', 'green-600', 'yellow-400',
-                            'green-500', 'green-600', 'green-500', 'green-600',
-                            'green-600', 'yellow-400', 'green-500', 'green-600',
-                            'green-500', 'green-600', 'green-600', 'green-500'
-                          ].map((color, i) => (
-                            <div key={i} className={`aspect-square bg-${color} rounded`}></div>
+                            'bg-green-600', 'bg-green-500', 'bg-green-600', 'bg-yellow-400',
+                            'bg-green-500', 'bg-green-600', 'bg-green-500', 'bg-green-600',
+                            'bg-green-600', 'bg-yellow-400', 'bg-green-500', 'bg-green-600',
+                            'bg-green-500', 'bg-green-600', 'bg-green-600', 'bg-green-500'
+                          ].map((colorClass, i) => (
+                            <div key={i} className={`aspect-square ${colorClass} rounded`}></div>
                           ))}
                         </div>
                         <p className="text-xs text-gray-500 mt-2 italic">Optimized per zone - efficient</p>

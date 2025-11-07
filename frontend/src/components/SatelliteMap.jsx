@@ -371,47 +371,47 @@ const SatelliteMap = ({ farm, center }) => {
       </div>
 
       {/* Legend - Enhanced with detailed information */}
-      <div className="absolute bottom-4 right-4 z-[1000] bg-white p-4 rounded-lg shadow-xl border-2 border-gray-200">
-        <h4 className="font-bold text-sm mb-3 text-gray-800 border-b pb-2">Irrigation Status Legend</h4>
-        <div className="space-y-2">
-          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
-            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#DC2626' }}></div>
+      <div className="absolute top-4 right-4 z-[1000] bg-white p-2 rounded-md shadow-lg border border-gray-200 max-w-xs">
+        <h4 className="font-bold text-xs mb-2 text-gray-800 border-b border-gray-200 pb-1">Irrigation Status Legend</h4>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-4 h-4 rounded border border-gray-300" style={{ backgroundColor: '#DC2626' }}></div>
             <div>
-              <span className="text-xs font-semibold text-gray-700">Critical (0-20%)</span>
+              <span className="text-[10px] font-semibold text-gray-700">Critical (0-20%)</span>
               <p className="text-[10px] text-gray-500">Immediate irrigation needed</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
-            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#F97316' }}></div>
+          <div className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-4 h-4 rounded border border-gray-300" style={{ backgroundColor: '#F97316' }}></div>
             <div>
-              <span className="text-xs font-semibold text-gray-700">High Stress (21-40%)</span>
+              <span className="text-[10px] font-semibold text-gray-700">High Stress (21-40%)</span>
               <p className="text-[10px] text-gray-500">Irrigation recommended</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
-            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#FBBF24' }}></div>
+          <div className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-4 h-4 rounded border border-gray-300" style={{ backgroundColor: '#FBBF24' }}></div>
             <div>
-              <span className="text-xs font-semibold text-gray-700">Moderate (41-60%)</span>
+              <span className="text-[10px] font-semibold text-gray-700">Moderate (41-60%)</span>
               <p className="text-[10px] text-gray-500">Monitor closely</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
-            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#86EFAC' }}></div>
+          <div className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-4 h-4 rounded border border-gray-300" style={{ backgroundColor: '#86EFAC' }}></div>
             <div>
-              <span className="text-xs font-semibold text-gray-700">Healthy (61-80%)</span>
+              <span className="text-[10px] font-semibold text-gray-700">Healthy (61-80%)</span>
               <p className="text-[10px] text-gray-500">Normal schedule</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
-            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#22C55E' }}></div>
+          <div className="flex items-center gap-2 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-4 h-4 rounded border border-gray-300" style={{ backgroundColor: '#22C55E' }}></div>
             <div>
-              <span className="text-xs font-semibold text-gray-700">Optimal (81-100%)</span>
+              <span className="text-[10px] font-semibold text-gray-700">Optimal (81-100%)</span>
               <p className="text-[10px] text-gray-500">Well irrigated</p>
             </div>
           </div>
         </div>
-        <div className="mt-3 pt-2 border-t border-gray-200">
-          <p className="text-[10px] text-gray-600 italic">💧 Click zones for detailed irrigation recommendations</p>
+        <div className="mt-2 pt-1 border-t border-gray-200">
+          <p className="text-[9px] text-gray-600 italic">💧 Click zones for recommendations</p>
         </div>
       </div>
 

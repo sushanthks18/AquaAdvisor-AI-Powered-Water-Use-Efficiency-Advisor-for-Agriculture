@@ -16,6 +16,9 @@ from weather_service import WeatherService
 from recommendation_engine import RecommendationEngine
 from utils import calculate_field_area, validate_boundary
 
+# Import auth blueprint
+from auth.auth_routes import auth_bp
+
 # Import Shapely for geometric operations
 try:
     from shapely.geometry import Polygon, box
@@ -28,45 +31,55 @@ except ImportError:
 app = Flask(__name__)
 CORS(app)
 
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///aquaadvisor.db')
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your-secret-key-change-in-production')
+
+# Initialize database
+from models.database import init_db
+db = init_db(app)
+
 # Register blueprints
-# app.register_blueprint(auth_bp, url_prefix='/api/auth')  # Temporarily disabled
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
-# Simple mock auth endpoints for demo
-@app.route('/api/auth/signup', methods=['POST'])
-def mock_signup():
-    """Mock signup endpoint for demo purposes"""
-    try:
-        data = request.get_json()
-        return jsonify({
-            'message': 'Registration successful! You can now login.',
-            'user': {
-                'id': 1,
-                'full_name': data.get('full_name', 'User'),
-                'mobile': data.get('mobile', ''),
-                'email': data.get('email', '')
-            }
-        }), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/auth/login', methods=['POST'])
-def mock_login():
-    """Mock login endpoint for demo purposes"""
-    try:
-        data = request.get_json()
-        return jsonify({
-            'message': 'Login successful',
-            'user': {
-                'id': 1,
-                'full_name': 'Demo User',
-                'mobile': data.get('mobile', ''),
-                'email': 'demo@example.com'
-            },
-            'access_token': 'demo_access_token_12345',
-            'refresh_token': 'demo_refresh_token_67890'
-        }), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# # Simple mock auth endpoints for demo
+# @app.route('/api/auth/signup', methods=['POST'])
+# def mock_signup():
+#     """Mock signup endpoint for demo purposes"""
+#     try:
+#         data = request.get_json()
+#         return jsonify({
+#             'message': 'Registration successful! You can now login.',
+#             'user': {
+#                 'id': 1,
+#                 'full_name': data.get('full_name', 'User'),
+#                 'mobile': data.get('mobile', ''),
+#                 'email': data.get('email', '')
+#             }
+#         }), 201
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+#
+# @app.route('/api/auth/login', methods=['POST'])
+# def mock_login():
+#     """Mock login endpoint for demo purposes"""
+#     try:
+#         data = request.get_json()
+#         return jsonify({
+#             'message': 'Login successful',
+#             'user': {
+#                 'id': 1,
+#                 'full_name': 'Demo User',
+#                 'mobile': data.get('mobile', ''),
+#                 'email': 'demo@example.com'
+#             },
+#             'access_token': 'demo_access_token_12345',
+#             'refresh_token': 'demo_refresh_token_67890'
+#         }), 200
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 # Initialize services
 satellite_fetcher = SatelliteFetcher()
@@ -823,4 +836,4 @@ def subdivide_polygon_fallback(boundary_coords, num_zones):
         }]
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=(FLASK_ENV == 'development'))
+    app.run(host='0.0.0.0', port=5002, debug=(FLASK_ENV == 'development'))

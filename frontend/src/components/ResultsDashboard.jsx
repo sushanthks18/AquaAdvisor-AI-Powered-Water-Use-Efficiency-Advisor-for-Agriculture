@@ -52,7 +52,7 @@ const ResultsDashboard = ({ data, onNewAnalysis }) => {
       try {
         setLoadingForecast(true);
         const currentNDVI = data?.statistics?.mean || 0.5;
-        const response = await axios.post('http://localhost:5000/api/predict-future-stress', {
+        const response = await axios.post('http://localhost:5002/api/predict-future-stress', {
           current_ndvi: currentNDVI,
           lat: data?.metadata?.lat || 28.6139,
           lon: data?.metadata?.lon || 77.2090
