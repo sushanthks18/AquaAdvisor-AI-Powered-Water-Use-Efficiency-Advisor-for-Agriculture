@@ -1,0 +1,188 @@
+=====================================================
+TAMIL NADU LAND RECORDS API INTEGRATION GUIDE
+=====================================================
+
+This document explains how to connect to actual government land records databases.
+
+## CURRENT STATUS
+
+Mode: DEVELOPMENT (Mock Data)
+- USE_MOCK_LAND_RECORDS=True (in .env file)
+- System uses sample data for testing
+- No real API credentials required
+
+## TO USE REAL GOVERNMENT DATA
+
+### Step 1: Get API Access
+
+#### Option A: Tamil Nadu Land Records (TNREGINET)
+Website: https://tnreginet.gov.in
+Portal: https://eservices.tn.gov.in/
+
+1. Visit TNREGINET portal
+2. Register as a developer/organization
+3. Submit application for API access
+4. Required documents:
+   - Organization registration
+   - Purpose of data usage
+   - Data security compliance certificate
+5. Approval time: 15-30 days
+6. Receive API Key and documentation
+
+#### Option B: National Land Records (DILRMP)
+Website: https://landrecords.gov.in
+Portal: https://dilrmp.gov.in/
+
+1. Register on DILRMP portal
+2. Apply for API integration
+3. Get state-specific API endpoints
+4. Receive API credentials
+
+### Step 2: Configure Environment Variables
+
+Create .env file (copy from .env.example):
+
+```bash
+cd backend
+cp .env.example .env
+nano .env
+```
+
+Update these values:
+
+```env
+# Set to False to enable real API
+USE_MOCK_LAND_RECORDS=False
+
+# Add your API credentials
+TN_LAND_RECORDS_API=https://tnreginet.gov.in/api/v1
+LAND_RECORDS_API_KEY=your-actual-api-key-here
+
+# Alternative national API
+NATIONAL_LAND_RECORDS_API=https://landrecords.gov.in/api/v1
+```
+
+### Step 3: Install Required Dependencies
+
+```bash
+pip3 install requests python-dotenv
+```
+
+### Step 4: Test the Integration
+
+```python
+# Test script
+from farms.land_records_integration import verify_survey_number
+
+result = verify_survey_number(
+    survey_number="123/2A",
+    district="Coimbatore",
+    taluk="Coimbatore North",
+    village="Narasipuram"
+)
+
+print(result)
+```
+
+## API ENDPOINTS
+
+### Tamil Nadu Land Records
+
+1. Verify Survey Number:
+   POST /api/v1/land-records/verify
+   {
+     "survey_number": "123/2A",
+     "district": "Coimbatore",
+     "taluk": "Coimbatore North",
+     "village": "Narasipuram"
+   }
+
+2. Fetch Boundaries:
+   POST /api/v1/cadastral/boundaries
+   {
+     "survey_number": "123/2A",
+     "district": "Coimbatore",
+     "format": "geojson"
+   }
+
+3. Search by Owner:
+   POST /api/v1/land-records/search
+   {
+     "owner_name": "John Doe",
+     "district": "Coimbatore"
+   }
+
+## DATA PRIVACY & COMPLIANCE
+
+IMPORTANT: Using government land records requires:
+
+1. Legal Authorization:
+   - Proper licensing agreement
+   - Data protection compliance
+   - User consent for data access
+
+2. Security Requirements:
+   - HTTPS only
+   - API key encryption
+   - Secure data storage
+   - Audit logging
+
+3. Usage Restrictions:
+   - Rate limiting (typically 100 requests/minute)
+   - Data caching allowed for 24 hours
+   - No bulk downloads
+   - No commercial resale of data
+
+## COST CONSIDERATIONS
+
+- Tamil Nadu APIs: Usually FREE for agricultural apps
+- National APIs: May require licensing fees
+- Rate limits apply
+- Commercial use may need separate agreement
+
+## DEVELOPMENT vs PRODUCTION
+
+### Development (Current):
+- USE_MOCK_LAND_RECORDS=True
+- No API key needed
+- Instant testing
+- Sample data only
+
+### Production:
+- USE_MOCK_LAND_RECORDS=False
+- Valid API key required
+- Real government data
+- Legal compliance needed
+
+## TROUBLESHOOTING
+
+If API connection fails:
+1. Check API key validity
+2. Verify network connectivity
+3. Check rate limits
+4. Review error logs
+5. System automatically falls back to mock data
+
+## SUPPORT CONTACTS
+
+Tamil Nadu Land Records:
+- Email: support@tnreginet.gov.in
+- Phone: 044-XXXXXXXX
+- Portal: https://tnreginet.gov.in/support
+
+National Land Records:
+- Email: dilrmp-support@gov.in
+- Website: https://landrecords.gov.in
+
+## NEXT STEPS
+
+1. Keep USE_MOCK_LAND_RECORDS=True for development
+2. Test all features with mock data
+3. Apply for API access when ready for production
+4. Update .env with real credentials
+5. Test with real data in staging environment
+6. Deploy to production
+
+=====================================================
+Last Updated: 2025-11-06
+=====================================================
