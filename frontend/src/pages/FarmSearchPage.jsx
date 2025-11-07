@@ -97,10 +97,25 @@ const FarmSearchPage = () => {
       };
       
       const response = await analyzeField(requestData);
-      setAnalysisData(response.data);
+      
+      // Ensure the data has all required properties
+      const completeData = {
+        metadata: {
+          timestamp: new Date().toISOString(),
+          analysis_date: new Date().toISOString().split('T')[0],
+          field_area_hectares: selectedFarm.area.value,
+          health_score: selectedFarm.overallHealth,
+          crop_type: selectedFarm.cropType.toLowerCase(),
+          crop_name: selectedFarm.cropType
+        },
+        ...(response.data || {})
+      };
+      
+      setAnalysisData(completeData);
     } catch (error) {
       console.error('Full analysis failed:', error);
       alert('Analysis failed. Please try again.');
+      setShowFullAnalysis(false);
     } finally {
       setIsAnalyzing(false);
     }

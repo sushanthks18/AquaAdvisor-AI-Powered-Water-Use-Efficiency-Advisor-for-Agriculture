@@ -18,6 +18,28 @@ const ResultsDashboard = ({ data, onNewAnalysis }) => {
   const [showDemoComparison, setShowDemoComparison] = useState(false);
   const [stressForecast, setStressForecast] = useState(null);
   const [loadingForecast, setLoadingForecast] = useState(false);
+  
+  // Validate data
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-50 flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full mx-4 text-center">
+          <div className="text-red-500 mb-4">
+            <FileText className="w-16 h-16 mx-auto" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Data Missing</h2>
+          <p className="text-gray-600 mb-6">Unable to load analysis data. Please try again.</p>
+          <button
+            onClick={onNewAnalysis}
+            className="bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <RefreshCw className="w-5 h-5 inline mr-2" />
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleNewAnalysis = () => {
     onNewAnalysis();
@@ -93,6 +115,14 @@ const ResultsDashboard = ({ data, onNewAnalysis }) => {
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(75, 85, 99); // Gray-600
       
+      const healthScore = data?.metadata?.health_score || data?.overallHealth || 50;
+      const meanNDVI = data?.statistics?.mean || 0.5;
+      const fieldArea = data?.metadata?.field_area_hectares || data?.area?.value || 10;
+      const waterDeficit = data?.water_deficit?.current_deficit_mm || 25;
+      const zoneDistribution = data?.zone_distribution || {};
+      const recommendations = data?.recommendations || [];
+      const waterEfficiency = data?.water_efficiency || {};
+
       const overviewData = [
         ['Health Score:', `${healthScore.toFixed(1)}%`],
         ['Mean NDVI:', `${meanNDVI.toFixed(3)}`],

@@ -75,7 +75,7 @@ const SatelliteMap = ({ farm, center }) => {
       }
     });
 
-    // Draw farm boundary - HIGHLY VISIBLE
+    // Draw farm boundary - HIGHLY VISIBLE with clear separation
     const boundaryPolygon = L.polygon(
       farm.boundary.map(coord => [coord.lat, coord.lng]),
       {
@@ -83,7 +83,10 @@ const SatelliteMap = ({ farm, center }) => {
         weight: 6,               // Thick 6px border
         fillColor: '#FFFF00',    // Yellow fill
         fillOpacity: 0.2,        // 20% opacity
-        className: 'farm-boundary-pulse'
+        className: 'farm-boundary-pulse',
+        dashArray: '10, 10',     // Dashed pattern for clear visibility
+        lineCap: 'round',
+        lineJoin: 'round'
       }
     );
 
@@ -110,8 +113,48 @@ const SatelliteMap = ({ farm, center }) => {
     };
 
     // Draw stress zones INSIDE boundary
-    farm.stressZones.forEach(zone => {
-      const zoneColor = stressColors[zone.stressLevel];
+    console.log(`🗺️ Rendering ${farm.stressZones.length} stress zones for ${farm.name}`);
+    
+    farm.stressZones.forEach((zone, index) => {
+      console.log(`Zone ${zone.zoneId}:`, zone.coordinates);
+      
+      const zoneColor = stressColors[zone.stressLevel] || stressColors['moderate'];
+      
+      // Validate zone coordinates
+      if (!zone.coordinates || zone.coordinates.length < 3) {
+        console.warn(`⚠️ Zone ${zone.zoneId} has invalid coordinates, skipping`);
+        return;
+      }
+      
+      // Validate that zone coordinates are within farm boundary
+      const boundaryLats = farm.boundary.map(c => c.lat);
+      const boundaryLngs = farm.boundary.map(c => c.lng);
+      const minBoundaryLat = Math.min(...boundaryLats);
+      const maxBoundaryLat = Math.max(...boundaryLats);
+      const minBoundaryLng = Math.min(...boundaryLngs);
+      const maxBoundaryLng = Math.max(...boundaryLngs);
+      
+      const zoneLats = zone.coordinates.map(c => c.lat);
+      const zoneLngs = zone.coordinates.map(c => c.lng);
+      const minZoneLat = Math.min(...zoneLats);
+      const maxZoneLat = Math.max(...zoneLats);
+      const minZoneLng = Math.min(...zoneLngs);
+      const maxZoneLng = Math.max(...zoneLngs);
+      
+      // Check if zone is outside boundary
+      if (minZoneLat < minBoundaryLat || maxZoneLat > maxBoundaryLat || 
+          minZoneLng < minBoundaryLng || maxZoneLng > maxBoundaryLng) {
+        console.warn(`⚠️ Zone ${zone.zoneId} extends outside farm boundary, coordinates will be adjusted`);
+        
+        // Adjust coordinates to fit within boundary
+        const adjustedCoords = zone.coordinates.map(coord => ({
+          lat: Math.max(minBoundaryLat, Math.min(maxBoundaryLat, coord.lat)),
+          lng: Math.max(minBoundaryLng, Math.min(maxBoundaryLng, coord.lng))
+        }));
+        
+        // Update zone with adjusted coordinates
+        zone.coordinates = adjustedCoords;
+      }
       
       const zonePolygon = L.polygon(
         zone.coordinates.map(coord => [coord.lat, coord.lng]),
@@ -120,30 +163,68 @@ const SatelliteMap = ({ farm, center }) => {
           weight: 3,
           fillColor: zoneColor.color,
           fillOpacity: zoneColor.opacity,
-          className: 'stress-zone'
+          className: 'stress-zone',
+          // Add tooltip on hover
+          title: `Zone ${zone.zoneId}: ${zone.stressLevel.toUpperCase()}`
         }
       );
 
       zonePolygon.addTo(map);
 
-      // Create detailed popup for each zone
+      // Create detailed popup for each zone with comprehensive information
       const zonePopupContent = `
-        <div style="padding: 8px; min-width: 200px;">
-          <h4 style="margin: 0 0 8px 0; font-weight: bold; color: ${zoneColor.color};">
-            Zone ${zone.zoneId} - ${zone.location}
-          </h4>
-          <p style="margin: 4px 0;"><strong>Stress Level:</strong> ${zone.stressLevel.toUpperCase()}</p>
-          <p style="margin: 4px 0;"><strong>Health Score:</strong> ${zone.healthScore}%</p>
-          <p style="margin: 4px 0;"><strong>NDVI:</strong> ${zone.ndviValue.toFixed(2)}</p>
-          <p style="margin: 4px 0;"><strong>Soil Moisture:</strong> ${zone.soilMoisture}%</p>
-          <hr style="margin: 8px 0; border: none; border-top: 1px solid #ddd;" />
-          <p style="margin: 4px 0; font-weight: bold; color: ${
+        <div style="padding: 12px; min-width: 280px; max-width: 320px;">
+          <div style="background: linear-gradient(135deg, ${zoneColor.color}, ${zoneColor.color}dd); padding: 12px; margin: -12px -12px 12px -12px; border-radius: 8px 8px 0 0;">
+            <h4 style="margin: 0; font-weight: bold; color: white; font-size: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+              🎯 Zone ${zone.zoneId} - ${zone.location}
+            </h4>
+          </div>
+          
+          <div style="background: #f9fafb; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div>
+                <p style="margin: 0; font-size: 11px; color: #6b7280; font-weight: 500;">Status</p>
+                <p style="margin: 2px 0 0 0; font-size: 13px; color: ${zoneColor.color}; font-weight: bold; text-transform: uppercase;">${zone.stressLevel}</p>
+              </div>
+              <div>
+                <p style="margin: 0; font-size: 11px; color: #6b7280; font-weight: 500;">Health Score</p>
+                <p style="margin: 2px 0 0 0; font-size: 13px; color: #10b981; font-weight: bold;">${zone.healthScore}%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <p style="margin: 0 0 6px 0; font-size: 12px; color: #374151; font-weight: 600; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">📊 Field Metrics</p>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #6b7280;">🌿 NDVI Value:</span>
+                <span style="font-size: 12px; font-weight: 600; color: #1f2937;">${zone.ndviValue.toFixed(3)}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #6b7280;">💧 Soil Moisture:</span>
+                <span style="font-size: 12px; font-weight: 600; color: #1f2937;">${zone.soilMoisture}%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div style="background: ${zone.irrigationRecommendation.action === 'increase' ? '#fef2f2' : zone.irrigationRecommendation.action === 'decrease' ? '#f0fdf4' : '#f9fafb'}; padding: 10px; border-radius: 6px; border-left: 3px solid ${
             zone.irrigationRecommendation.action === 'increase' ? '#DC2626' :
             zone.irrigationRecommendation.action === 'decrease' ? '#22C55E' : '#6B7280'
           };">
-            ${zone.irrigationRecommendation.action.toUpperCase()} ${zone.irrigationRecommendation.percentage}%
-          </p>
-          <p style="margin: 4px 0; font-size: 12px;">${zone.irrigationRecommendation.waterAmount}</p>
+            <p style="margin: 0 0 6px 0; font-size: 11px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">⚡ Irrigation Action</p>
+            <p style="margin: 0 0 4px 0; font-weight: bold; font-size: 14px; color: ${
+              zone.irrigationRecommendation.action === 'increase' ? '#DC2626' :
+              zone.irrigationRecommendation.action === 'decrease' ? '#22C55E' : '#6B7280'
+            };">
+              ${zone.irrigationRecommendation.action.toUpperCase()} ${zone.irrigationRecommendation.percentage}%
+            </p>
+            <p style="margin: 0 0 6px 0; font-size: 12px; color: #4b5563;">💧 ${zone.irrigationRecommendation.waterAmount}</p>
+            <p style="margin: 0; font-size: 11px; color: #6b7280; font-style: italic;">${zone.irrigationRecommendation.reason}</p>
+          </div>
+          
+          <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+            <p style="margin: 0; font-size: 10px; color: #9ca3af; text-align: center;">🕒 Click zone polygon for quick view</p>
+          </div>
         </div>
       `;
       
@@ -156,29 +237,60 @@ const SatelliteMap = ({ farm, center }) => {
         icon: L.divIcon({
           className: 'zone-marker',
           html: `
-            <div style="
-              background: ${zoneColor.color};
-              color: white;
-              border: 3px solid white;
-              border-radius: 50%;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 16px;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            ">
+            <div 
+              style="
+                background: ${zoneColor.color};
+                color: white;
+                border: 3px solid white;
+                border-radius: 50%;
+                width: 45px;
+                height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 18px;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+                cursor: pointer;
+                transition: transform 0.2s;
+              "
+              title="Zone ${zone.zoneId}: ${zone.stressLevel} - Click for details"
+            >
               ${zone.zoneId}
             </div>
           `,
-          iconSize: [40, 40]
-        })
+          iconSize: [45, 45]
+        }),
+        title: `Zone ${zone.zoneId}: ${zone.stressLevel.toUpperCase()} (${zone.healthScore}%)`
       });
       
       marker.addTo(map);
       marker.bindPopup(zonePopupContent);
+      
+      // Add parcel label directly on map (optional)
+      const label = L.marker(zoneCenter, {
+        icon: L.divIcon({
+          className: 'parcel-label',
+          html: `
+            <div style="
+              background: rgba(255, 255, 255, 0.9);
+              border: 2px solid ${zoneColor.color};
+              border-radius: 12px;
+              padding: 4px 8px;
+              font-weight: bold;
+              font-size: 14px;
+              color: ${zoneColor.color};
+              text-align: center;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+              min-width: 40px;
+            ">
+              ${zone.zoneId}
+            </div>
+          `,
+          iconSize: [40, 30],
+          iconAnchor: [20, 15]
+        })
+      }).addTo(map);
     });
 
     // Fit map to boundary
@@ -258,30 +370,48 @@ const SatelliteMap = ({ farm, center }) => {
         </button>
       </div>
 
-      {/* Legend */}
-      <div className="absolute bottom-4 right-4 z-[1000] bg-white p-3 rounded-lg shadow-lg">
-        <h4 className="font-bold text-sm mb-2">Stress Levels</h4>
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#DC2626' }}></div>
-            <span className="text-xs">Critical (0-20%)</span>
+      {/* Legend - Enhanced with detailed information */}
+      <div className="absolute bottom-4 right-4 z-[1000] bg-white p-4 rounded-lg shadow-xl border-2 border-gray-200">
+        <h4 className="font-bold text-sm mb-3 text-gray-800 border-b pb-2">Irrigation Status Legend</h4>
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#DC2626' }}></div>
+            <div>
+              <span className="text-xs font-semibold text-gray-700">Critical (0-20%)</span>
+              <p className="text-[10px] text-gray-500">Immediate irrigation needed</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#F97316' }}></div>
-            <span className="text-xs">High (21-40%)</span>
+          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#F97316' }}></div>
+            <div>
+              <span className="text-xs font-semibold text-gray-700">High Stress (21-40%)</span>
+              <p className="text-[10px] text-gray-500">Irrigation recommended</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#FBBF24' }}></div>
-            <span className="text-xs">Moderate (41-60%)</span>
+          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#FBBF24' }}></div>
+            <div>
+              <span className="text-xs font-semibold text-gray-700">Moderate (41-60%)</span>
+              <p className="text-[10px] text-gray-500">Monitor closely</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#86EFAC' }}></div>
-            <span className="text-xs">Healthy (61-80%)</span>
+          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#86EFAC' }}></div>
+            <div>
+              <span className="text-xs font-semibold text-gray-700">Healthy (61-80%)</span>
+              <p className="text-[10px] text-gray-500">Normal schedule</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded" style={{ backgroundColor: '#22C55E' }}></div>
-            <span className="text-xs">Optimal (81-100%)</span>
+          <div className="flex items-center gap-3 hover:bg-gray-50 p-1 rounded transition">
+            <div className="w-5 h-5 rounded border border-gray-300" style={{ backgroundColor: '#22C55E' }}></div>
+            <div>
+              <span className="text-xs font-semibold text-gray-700">Optimal (81-100%)</span>
+              <p className="text-[10px] text-gray-500">Well irrigated</p>
+            </div>
           </div>
+        </div>
+        <div className="mt-3 pt-2 border-t border-gray-200">
+          <p className="text-[10px] text-gray-600 italic">💧 Click zones for detailed irrigation recommendations</p>
         </div>
       </div>
 
@@ -297,19 +427,36 @@ const SatelliteMap = ({ farm, center }) => {
         
         .stress-zone {
           transition: all 0.3s ease;
+          cursor: pointer;
         }
         
         .stress-zone:hover {
           stroke-width: 5 !important;
           fill-opacity: 0.8 !important;
+          filter: brightness(1.1);
         }
         
         .zone-marker {
           transition: transform 0.2s;
+          cursor: pointer;
         }
         
         .zone-marker:hover {
           transform: scale(1.2);
+        }
+        
+        .parcel-label {
+          pointer-events: none;
+          z-index: 999;
+        }
+        
+        .leaflet-tooltip {
+          background: rgba(255, 255, 255, 0.95) !important;
+          border: 2px solid #10b981 !important;
+          border-radius: 8px !important;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+          font-weight: 600 !important;
+          color: #1f2937 !important;
         }
       `}</style>
     </div>

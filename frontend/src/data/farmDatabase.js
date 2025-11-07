@@ -16,118 +16,17 @@ export const mockFarmDatabase = [
       { lat: 10.8242, lng: 79.2015 },
       { lat: 10.8230, lng: 79.1990 }
     ],
-    stressZones: [
-      {
-        zoneId: 1,
-        location: "NE Corner",
-        stressLevel: "critical",
-        healthScore: 15,
-        ndviValue: 0.25,
-        soilMoisture: 15,
-        coordinates: [
-          { lat: 10.7883, lng: 79.1400 },
-          { lat: 10.7895, lng: 79.1400 },
-          { lat: 10.7895, lng: 79.1420 },
-          { lat: 10.7883, lng: 79.1420 }
-        ],
-        irrigationRecommendation: {
-          priority: "urgent",
-          action: "increase",
-          percentage: 50,
-          waterAmount: "600L/day",
-          schedule: ["5:30-8:00 AM", "5:00-7:30 PM"],
-          reason: "Severe water stress detected"
-        }
-      },
-      {
-        zoneId: 2,
-        location: "NW Corner",
-        stressLevel: "high",
-        healthScore: 35,
-        ndviValue: 0.42,
-        soilMoisture: 28,
-        coordinates: [
-          { lat: 10.7883, lng: 79.1378 },
-          { lat: 10.7895, lng: 79.1378 },
-          { lat: 10.7895, lng: 79.1400 },
-          { lat: 10.7883, lng: 79.1400 }
-        ],
-        irrigationRecommendation: {
-          priority: "high",
-          action: "increase",
-          percentage: 40,
-          waterAmount: "500L/day",
-          schedule: ["6:00-8:00 AM", "5:30-7:00 PM"],
-          reason: "High water stress"
-        }
-      },
-      {
-        zoneId: 3,
-        location: "Center",
-        stressLevel: "moderate",
-        healthScore: 55,
-        ndviValue: 0.58,
-        soilMoisture: 45,
-        coordinates: [
-          { lat: 10.7870, lng: 79.1389 },
-          { lat: 10.7883, lng: 79.1389 },
-          { lat: 10.7883, lng: 79.1410 },
-          { lat: 10.7870, lng: 79.1410 }
-        ],
-        irrigationRecommendation: {
-          priority: "medium",
-          action: "increase",
-          percentage: 15,
-          waterAmount: "250L/day",
-          schedule: ["6:00-7:30 AM"],
-          reason: "Moderate stress, monitor closely"
-        }
-      },
-      {
-        zoneId: 4,
-        location: "SW Corner",
-        stressLevel: "healthy",
-        healthScore: 72,
-        ndviValue: 0.71,
-        soilMoisture: 65,
-        coordinates: [
-          { lat: 10.7870, lng: 79.1378 },
-          { lat: 10.7883, lng: 79.1378 },
-          { lat: 10.7883, lng: 79.1389 },
-          { lat: 10.7870, lng: 79.1389 }
-        ],
-        irrigationRecommendation: {
-          priority: "low",
-          action: "maintain",
-          percentage: 0,
-          waterAmount: "300L/day",
-          schedule: ["6:00-7:00 AM"],
-          reason: "Healthy vegetation, maintain current"
-        }
-      },
-      {
-        zoneId: 5,
-        location: "SE Corner",
-        stressLevel: "optimal",
-        healthScore: 88,
-        ndviValue: 0.84,
-        soilMoisture: 78,
-        coordinates: [
-          { lat: 10.7870, lng: 79.1410 },
-          { lat: 10.7883, lng: 79.1410 },
-          { lat: 10.7883, lng: 79.1420 },
-          { lat: 10.7870, lng: 79.1420 }
-        ],
-        irrigationRecommendation: {
-          priority: "low",
-          action: "decrease",
-          percentage: 20,
-          waterAmount: "200L/day",
-          schedule: ["6:30-7:00 AM"],
-          reason: "Risk of overwatering"
-        }
-      }
-    ],
+    stressZones: generateStressZones(
+      [ // Use the boundary to generate zones
+        { lat: 10.8234, lng: 79.1956 },
+        { lat: 10.8268, lng: 79.1962 },
+        { lat: 10.8275, lng: 79.2008 },
+        { lat: 10.8242, lng: 79.2015 },
+        { lat: 10.8230, lng: 79.1990 }
+      ],
+      "FARM001",
+      3  // 3 zones
+    ),
     overallHealth: 68
   },
   {
@@ -146,52 +45,17 @@ export const mockFarmDatabase = [
       { lat: 11.7175, lng: 78.2305 },
       { lat: 11.7152, lng: 78.2295 }
     ],
-    stressZones: [
-      {
-        zoneId: 1,
-        location: "North Section",
-        stressLevel: "high",
-        healthScore: 32,
-        ndviValue: 0.38,
-        soilMoisture: 25,
-        coordinates: [
-          { lat: 11.6657, lng: 78.1460 },
-          { lat: 11.6670, lng: 78.1460 },
-          { lat: 11.6670, lng: 78.1510 },
-          { lat: 11.6657, lng: 78.1510 }
-        ],
-        irrigationRecommendation: {
-          priority: "high",
-          action: "increase",
-          percentage: 45,
-          waterAmount: "550L/day",
-          schedule: ["5:30-8:00 AM", "5:00-7:00 PM"],
-          reason: "Cotton requires immediate irrigation"
-        }
-      },
-      {
-        zoneId: 2,
-        location: "South Section",
-        stressLevel: "healthy",
-        healthScore: 75,
-        ndviValue: 0.73,
-        soilMoisture: 68,
-        coordinates: [
-          { lat: 11.6643, lng: 78.1460 },
-          { lat: 11.6657, lng: 78.1460 },
-          { lat: 11.6657, lng: 78.1510 },
-          { lat: 11.6643, lng: 78.1510 }
-        ],
-        irrigationRecommendation: {
-          priority: "low",
-          action: "maintain",
-          percentage: 0,
-          waterAmount: "350L/day",
-          schedule: ["6:00-7:30 AM"],
-          reason: "Optimal conditions"
-        }
-      }
-    ],
+    stressZones: generateStressZones(
+      [ // Use the boundary to generate zones
+        { lat: 11.7145, lng: 78.2260 },
+        { lat: 11.7165, lng: 78.2238 },
+        { lat: 11.7182, lng: 78.2268 },
+        { lat: 11.7175, lng: 78.2305 },
+        { lat: 11.7152, lng: 78.2295 }
+      ],
+      "FARM002",
+      2  // 2 zones
+    ),
     overallHealth: 62
   },
   {
@@ -379,6 +243,7 @@ export const getDefaultFarm = (searchQuery) => {
 // Generate varied stress zones based on boundary
 function generateStressZones(boundary, seed) {
   const numZones = 2 + (seed % 4); // 2-5 zones
+  console.log(`🌾 Generating ${numZones} zones for seed ${seed}`);
   const zones = [];
   const stressLevels = ['critical', 'high', 'moderate', 'healthy', 'optimal'];
   
@@ -404,8 +269,23 @@ function generateStressZones(boundary, seed) {
       'optimal': 0.80 + ((seed + i) % 10) * 0.01
     };
     
-    // Create zone coordinates (subset of boundary)
-    const zoneCoords = boundary.slice(0, Math.min(4, boundary.length));
+    // Create zone coordinates - properly subdivide the boundary
+    const zoneCoords = subdividePolygon(boundary, numZones, i);
+    
+    // Validate zone coordinates
+    if (!zoneCoords || zoneCoords.length < 3) {
+      console.error(`❌ Zone ${i + 1} has invalid coordinates, using fallback`);
+      // Use a small square in center as fallback
+      const centerLat = (Math.min(...boundary.map(c => c.lat)) + Math.max(...boundary.map(c => c.lat))) / 2;
+      const centerLng = (Math.min(...boundary.map(c => c.lng)) + Math.max(...boundary.map(c => c.lng))) / 2;
+      const offset = 0.001;
+      zoneCoords = [
+        { lat: centerLat - offset, lng: centerLng - offset },
+        { lat: centerLat + offset, lng: centerLng - offset },
+        { lat: centerLat + offset, lng: centerLng + offset },
+        { lat: centerLat - offset, lng: centerLng + offset }
+      ];
+    }
     
     zones.push({
       zoneId: i + 1,
@@ -428,7 +308,133 @@ function generateStressZones(boundary, seed) {
         reason: `${stressLevel.charAt(0).toUpperCase() + stressLevel.slice(1)} stress level detected`
       }
     });
+    console.log(`  ✅ Zone ${i + 1}: ${stressLevel} at coords:`, zoneCoords);
+  }
+  
+  console.log(`🎯 Total zones generated: ${zones.length}`);
+  
+  // Final validation - ensure we have the expected number of zones
+  if (zones.length !== numZones) {
+    console.error(`❌ Expected ${numZones} zones, got ${zones.length}`);
   }
   
   return zones;
+}
+
+// Helper function to subdivide polygon into zones - IRREGULAR BOUNDARY AWARE VERSION
+function subdividePolygon(boundary, numZones, zoneIndex) {
+  if (!boundary || boundary.length < 3) {
+    console.warn('⚠️ Invalid boundary, using default');
+    return [
+      { lat: 10.0, lng: 78.0 },
+      { lat: 10.01, lng: 78.0 },
+      { lat: 10.01, lng: 78.01 },
+      { lat: 10.0, lng: 78.01 }
+    ];
+  }
+  
+  // Calculate the bounding box
+  const lats = boundary.map(c => c.lat);
+  const lngs = boundary.map(c => c.lng);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  
+  // Validate bounding box
+  if (minLat === maxLat || minLng === maxLng) {
+    console.error('❌ Invalid bounding box: zero area');
+    return [
+      { lat: minLat, lng: minLng },
+      { lat: minLat + 0.001, lng: minLng },
+      { lat: minLat + 0.001, lng: minLng + 0.001 },
+      { lat: minLat, lng: minLng + 0.001 }
+    ];
+  }
+  
+  // For irregular boundaries, we'll use a centroid-based approach
+  // Calculate centroid of the boundary
+  const centroidLat = lats.reduce((sum, lat) => sum + lat, 0) / lats.length;
+  const centroidLng = lngs.reduce((sum, lng) => sum + lng, 0) / lngs.length;
+  
+  // Add 20% padding to keep zones well inside boundary
+  const latPadding = (maxLat - minLat) * 0.2; // 20% padding
+  const lngPadding = (maxLng - minLng) * 0.2; // 20% padding
+  
+  const paddedMinLat = minLat + latPadding;
+  const paddedMaxLat = maxLat - latPadding;
+  const paddedMinLng = minLng + lngPadding;
+  const paddedMaxLng = maxLng - lngPadding;
+  
+  // Calculate grid dimensions - ensure we have enough rows/columns
+  const cols = Math.max(1, Math.ceil(Math.sqrt(numZones)));
+  const rows = Math.max(1, Math.ceil(numZones / cols));
+  
+  // Adjust if we have too many rows/columns
+  if (rows * cols < numZones) {
+    console.warn(`⚠️ Grid too small: ${rows}x${cols} < ${numZones} zones, adjusting`);
+  }
+  
+  // Divide into grid zones using padded area
+  const latStep = (paddedMaxLat - paddedMinLat) / Math.max(1, rows);
+  const lngStep = (paddedMaxLng - paddedMinLng) / Math.max(1, cols);
+  
+  // Validate step sizes
+  if (latStep <= 0 || lngStep <= 0) {
+    console.error('❌ Invalid step size: latStep=', latStep, 'lngStep=', lngStep);
+    return [
+      { lat: paddedMinLat, lng: paddedMinLng },
+      { lat: paddedMaxLat, lng: paddedMinLng },
+      { lat: paddedMaxLat, lng: paddedMaxLng },
+      { lat: paddedMinLat, lng: paddedMaxLng }
+    ];
+  }
+  
+  // Calculate which row and column this zone is in
+  const row = Math.min(Math.floor(zoneIndex / cols), rows - 1);
+  const col = Math.min(zoneIndex % cols, cols - 1);
+  
+  // Create a rectangle for this zone (well inside boundary)
+  const zoneLat1 = paddedMinLat + (row * latStep);
+  const zoneLat2 = Math.min(paddedMinLat + ((row + 1) * latStep), paddedMaxLat);
+  const zoneLng1 = paddedMinLng + (col * lngStep);
+  const zoneLng2 = Math.min(paddedMinLng + ((col + 1) * lngStep), paddedMaxLng);
+  
+  // Ensure we have valid coordinates
+  if (zoneLat1 >= zoneLat2 || zoneLng1 >= zoneLng2) {
+    console.warn(`⚠️ Invalid zone dimensions, using fallback`);
+    // Use a small square in the center
+    const centerLat = (paddedMinLat + paddedMaxLat) / 2;
+    const centerLng = (paddedMinLng + paddedMaxLng) / 2;
+    const smallStep = Math.min(latStep, lngStep) * 0.3;
+    return [
+      { lat: centerLat - smallStep, lng: centerLng - smallStep },
+      { lat: centerLat + smallStep, lng: centerLng - smallStep },
+      { lat: centerLat + smallStep, lng: centerLng + smallStep },
+      { lat: centerLat - smallStep, lng: centerLng + smallStep }
+    ];
+  }
+  
+  console.log(`  🗺️ Zone ${zoneIndex + 1} grid: row=${row}/${rows}, col=${col}/${cols}, lat[${zoneLat1.toFixed(6)}-${zoneLat2.toFixed(6)}], lng[${zoneLng1.toFixed(6)}-${zoneLng2.toFixed(6)}]`);
+  
+  // Create initial zone boundary as rectangle
+  let result = [
+    { lat: zoneLat1, lng: zoneLng1 },
+    { lat: zoneLat2, lng: zoneLng1 },
+    { lat: zoneLat2, lng: zoneLng2 },
+    { lat: zoneLat1, lng: zoneLng2 }
+  ];
+  
+  // Final validation
+  if (result.some(c => isNaN(c.lat) || isNaN(c.lng))) {
+    console.error('❌ Zone has NaN coordinates, using fallback');
+    return [
+      { lat: paddedMinLat, lng: paddedMinLng },
+      { lat: paddedMaxLat, lng: paddedMinLng },
+      { lat: paddedMaxLat, lng: paddedMaxLng },
+      { lat: paddedMinLat, lng: paddedMaxLng }
+    ];
+  }
+  
+  return result;
 }
