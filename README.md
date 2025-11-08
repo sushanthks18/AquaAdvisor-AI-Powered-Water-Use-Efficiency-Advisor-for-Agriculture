@@ -1,4 +1,4 @@
-# AquaAdvisor: AI-Powered Water Use Efficiency Advisor for Agriculture
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/b0ccabfc-ae57-4965-990e-e12e4a4be9f7" /># AquaAdvisor: AI-Powered Water Use Efficiency Advisor for Agriculture
 
 ## 🌾 Problem
 Agricultural irrigation consumes approximately 70% of the world's freshwater, yet much of it is wasted due to inefficient watering practices. Farmers often over-irrigate or under-irrigate crops, leading to reduced yields, water waste, and increased costs.
@@ -78,6 +78,11 @@ For detailed information, please refer to the documentation in the [docs](docs/)
 5. **Weather Analysis**: Current and forecasted weather data is retrieved to adjust recommendations
 6. **Recommendation Generation**: Actionable irrigation advice is generated based on stress zones and weather
 7. **Visualization**: Results are displayed through interactive maps and charts
+
+
+## Project Snapshots
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/02e3299f-97ce-4e87-82a9-9e7d333f703e" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/386780d4-826a-4e7b-be82-660d6b14c6fa" />
 
 ## 📈 Scientific Background
 The application is based on the principle that water-stressed vegetation reflects light differently than healthy vegetation. The NDVI (Normalized Difference Vegetation Index) is calculated using near-infrared (NIR) and red light reflectance:
