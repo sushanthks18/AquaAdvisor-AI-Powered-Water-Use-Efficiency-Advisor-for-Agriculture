@@ -89,7 +89,7 @@ For detailed information, please refer to the documentation in the [docs](docs/)
 <img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 23 29 PM" src="https://github.com/user-attachments/assets/74f44245-212e-42bb-a840-a4521cc95562" />
 <img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 25 06 PM" src="https://github.com/user-attachments/assets/dc429ef1-9ba4-4a80-94b1-1ea68e8f64fa" />
 <img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 23 49 PM" src="https://github.com/user-attachments/assets/268b9ce4-7fb7-44e1-8327-846454a9903b" />
-<img width="469" height="663" alt="Screenshot 2025-11-07 at 10 58 24 PM" src="https://github.com/user-attachments/assets/45eb80ad-76c7-4fab-9742-f0cef12fd9b5" />
+<img width="469" height="663" align="center" alt="Screenshot 2025-11-07 at 10 58 24 PM" src="https://github.com/user-attachments/assets/45eb80ad-76c7-4fab-9742-f0cef12fd9b5" />
 
 
 ## 📈 Scientific Background
