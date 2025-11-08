@@ -82,7 +82,15 @@ For detailed information, please refer to the documentation in the [docs](docs/)
 
 ## Project Snapshots
 <img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/02e3299f-97ce-4e87-82a9-9e7d333f703e" />
-<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/386780d4-826a-4e7b-be82-660d6b14c6fa" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 54 03 PM" src="https://github.com/user-attachments/assets/b897de01-3f1f-4135-9d4c-125c8fda7526" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 54 28 PM" src="https://github.com/user-attachments/assets/6d6e9f7a-ebb2-4ce0-94e8-1cf6b8820f8d" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 54 39 PM" src="https://github.com/user-attachments/assets/1a8f8a0b-81ad-415a-a46e-f31dc3ec7489" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 55 43 PM" src="https://github.com/user-attachments/assets/f03a4cfe-6323-4ebf-8e32-3c35055150ed" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 23 29 PM" src="https://github.com/user-attachments/assets/74f44245-212e-42bb-a840-a4521cc95562" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 25 06 PM" src="https://github.com/user-attachments/assets/dc429ef1-9ba4-4a80-94b1-1ea68e8f64fa" />
+<img width="1440" height="900" alt="Screenshot 2025-11-07 at 11 23 49 PM" src="https://github.com/user-attachments/assets/268b9ce4-7fb7-44e1-8327-846454a9903b" />
+<img width="469" height="663" alt="Screenshot 2025-11-07 at 10 58 24 PM" src="https://github.com/user-attachments/assets/45eb80ad-76c7-4fab-9742-f0cef12fd9b5" />
+
 
 ## 📈 Scientific Background
 The application is based on the principle that water-stressed vegetation reflects light differently than healthy vegetation. The NDVI (Normalized Difference Vegetation Index) is calculated using near-infrared (NIR) and red light reflectance:
