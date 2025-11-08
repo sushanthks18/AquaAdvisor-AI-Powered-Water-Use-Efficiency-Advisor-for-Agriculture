@@ -1,4 +1,5 @@
-<img width="1440" height="900" alt="Screenshot 2025-11-07 at 10 24 11 PM" src="https://github.com/user-attachments/assets/b0ccabfc-ae57-4965-990e-e12e4a4be9f7" /># AquaAdvisor: AI-Powered Water Use Efficiency Advisor for Agriculture
+<img width="1434" height="803" alt="image" src="https://github.com/user-attachments/assets/a63d0824-2a08-4c04-939b-3c55cefe00ff" />
+# AquaAdvisor: AI-Powered Water Use Efficiency Advisor for Agriculture
 
 ## 🌾 Problem
 Agricultural irrigation consumes approximately 70% of the world's freshwater, yet much of it is wasted due to inefficient watering practices. Farmers often over-irrigate or under-irrigate crops, leading to reduced yields, water waste, and increased costs.
