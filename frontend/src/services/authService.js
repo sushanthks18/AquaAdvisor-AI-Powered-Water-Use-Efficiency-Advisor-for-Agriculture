@@ -27,7 +27,7 @@ const mockLogin = async (mobile, password) => {
   
   // Simple validation
   if (password === 'test123' || !password) {
-    return {
+    const data = {
       message: 'Login successful',
       user: {
         id: 1,
@@ -38,6 +38,15 @@ const mockLogin = async (mobile, password) => {
       access_token: 'demo_access_token_12345',
       refresh_token: 'demo_refresh_token_67890'
     };
+    
+    // Store tokens in localStorage like the real API version
+    if (data.access_token) {
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    }
+    
+    return data;
   } else {
     throw new Error('Invalid credentials');
   }
