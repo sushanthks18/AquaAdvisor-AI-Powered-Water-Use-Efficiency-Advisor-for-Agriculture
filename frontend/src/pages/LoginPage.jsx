@@ -33,7 +33,17 @@ const LoginPage = () => {
       const from = location.state?.from || '/analyze';
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please try again.');
+      console.error('Login error:', err); // Log the full error for debugging
+      // Handle different types of errors
+      if (err.message) {
+        setError(err.message);
+      } else if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -177,6 +187,9 @@ const LoginPage = () => {
           <p className="text-xs text-blue-700">
             Since this is a demo, you can sign up with any mobile number. 
             OTP verification is simulated (check console for OTP).
+          </p>
+          <p className="text-xs text-blue-700 mt-1">
+            <strong>Test Credentials:</strong> Mobile: 9999888877, Password: test123
           </p>
         </div>
       </div>
